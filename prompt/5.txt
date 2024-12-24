@@ -1,0 +1,94 @@
+1. Project Overview
+Purpose
+The Smart Cube is a wireless, gesture-based controller designed for intuitive and efficient control of household devices. Its primary purpose is to provide users with an easy-to-use, compact device capable of controlling devices like LED lights and fans using various gestures.
+
+Scope
+This project focuses on:
+
+Developing expertise in interpreting motion data (rotation and acceleration) using sensors.
+Implementing embedded software for real-time gesture recognition and device interaction.
+Creating devices (e.g., LED and FAN) that can interact seamlessly with the Smart Cube.
+Building a mobile application with React Native and Expo for seamless configuration and management of the cube.
+Storing user-specific data securely using Supabase, enabling differentiated access control based on user roles.
+2. Glossary and References
+MPU6050: A motion tracking sensor used for gesture detection.
+ESP32-C3: A low-power, Wi-Fi-enabled microcontroller.
+PWM: Pulse Width Modulation, a technique for controlling the brightness of LEDs and speed of fans.
+Supabase: An open-source backend service offering authentication and database features.
+Refer to the /References folder for additional terms and sources.
+3. Overall Description
+User Needs
+Rapid Response: The system must detect gestures in real-time and provide prompt responses to control connected devices.
+Ease of Use: The cube must be compact and intuitive, ensuring a friendly user experience.
+Flexible Configuration: Users should easily configure Wi-Fi credentials and assign device control preferences via a mobile app.
+Assumptions and Dependencies
+Power Source: The cube is powered by a 3.7V 18650 lithium battery, rechargeable via a Type-C port.
+Connectivity: Wi-Fi is used for communication due to its user-friendly configuration and widespread availability.
+Sensor and Actuator Compatibility: The system uses 3.3V microcontroller-compatible sensors and actuators.
+Database: Supabase is used to manage user data and differentiate user roles for table access.
+App Development: The mobile app is built with React Native and Expo, manually handling Wi-Fi setup and credentials transmission to the cube without external libraries.
+4. Features and Requirements
+4.1 Functional Requirements
+Gesture Detection:
+
+Gestures Supported:
+Shake
+Rotate clockwise and counterclockwise
+Flip to a different side
+The MPU6050 module must filter noisy data to ensure reliable detection.
+Wi-Fi Configuration:
+
+Update Wi-Fi credentials via the mobile app.
+The cube must connect automatically once credentials are transmitted.
+Device Interaction:
+
+Control devices (e.g., LED and FAN) using PWM for smooth adjustments in brightness or speed.
+Handle user-specific preferences stored in the database.
+Mobile App Integration:
+
+Built using React Native with Expo.
+Authenticate users and manage configurations using Supabase.
+Database:
+
+Supabase backend for storing user data and preferences.
+Differentiate table access based on user roles.
+Real-Time Processing:
+
+Process gestures in real-time using the ESP32-C3 microcontroller to enable immediate device responses.
+4.2 Non-functional Requirements
+Low Power Consumption:
+
+Optimize the system to maximize battery life, ensuring efficient use of power.
+Memory Efficiency:
+
+Ensure minimal memory usage for smooth operation and reliability of gesture detection algorithms.
+Connectivity Alternatives:
+
+Explore future support for LoRa, Zigbee, or GSM to provide alternatives to Wi-Fi for specific scenarios.
+User Security:
+
+Use Supabase authentication to secure data and limit access based on user roles.
+Mobile App Usability:
+
+Ensure the app has an intuitive interface for easy configuration and real-time status updates.
+5. Deliverables
+Hardware:
+
+A compact cube powered by an ESP32-C3 microcontroller and equipped with an MPU6050 module.
+Integrated rechargeable battery and Type-C charging port.
+Software:
+
+Firmware for real-time gesture detection and device control.
+React Native mobile application for configuration and management.
+Supabase database with role-based table access for users.
+Documentation:
+
+User manual for setting up and using the cube.
+Development documentation detailing the gesture recognition algorithm and system architecture.
+
+6. Success Metrics
+Gesture recognition accuracy > 95%.
+Wi-Fi connection and device control response time < 1 second.
+Battery life of at least 10 hours of continuous use.
+Successful differentiation of user roles and database table access.
+User satisfaction rating > 90% in usability testing.

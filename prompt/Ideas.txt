@@ -1,0 +1,93 @@
+Nội dung đề tài: Sử dụng hộp thông minh để điều khiển các thiết bị trong nhà
+Có thể chia nội dung làm 4 phần: 
+- Hộp
+- Các thiết bị trong nhà: Đèn Led, Fan
+- Cơ sở dữ liệu 
+- App điện thoại
+
+
+--1. Hộp--
+1.1 Xác định yêu cầu
+- Hộp phải gọn nhẹ, dễ xài
+- Thực hiện các tương tác với hộp để điều khiển các thiết bị khác
+- Chỉ có 1 người sở hữu được thiết bị, muốn trao quyền thì người đang sở hữu phải từ bỏ
+
+1.2 Ý tưởng
+1.2.1 Xem xét các cử chỉ khả thi, bao gồm: Lật, Xoay ,Lắc
+ - Hành động "Lật": 
+	Nội dung: Khi lật sang một mặt cụ thể sẽ thực hiện 1 chức năng nào đó như bật đèn, tắt đèn 
+ - Hành động "Xoay":
+	Nội dung: Khi xoay trái hoặc xoay phải 1 mặt thì sẽ thực hiện 1 chức năng nào đó như tăng/giảm ... 
+ - Hành động "Lắc:
+	Nội dung: Khi lắc ở 1 mặt thì sẽ thực hiện 1 chức năng nào đó như thay đổi chế độ đèn
+ --> Vậy các hành động này nền chồng lên một mặt không ?( Nghĩa là phát hiện khi thay đổi mặt , ở mặt mới đó có thể phát hiện lắc/xoay) 
+ Câu trả lời: Không nên chồng, hãy xem xét ví dụ dưới đây
+ Ví dụ: Giả dụ thay đổi sang mặt đươc đính sẵn tính năng là "Tắt đèn"(1), mặt (1) cũng được kèm tính năng xoay trái (Giảm độ sáng), xoay phải(Tăng độ sáng)
+ - Xét về mặt thực tế: Rất tiện khi 1 mặt chứa cả 3 tính năng
+ - Xét về mặt hệ thống: Phải đặt các ràng buộc rõ ràng cho csdl trong việc chọn lọc các option trên mặt
+--> Nên được chia ra theo 2 kiểu hành động:
+- One(Hành động đơn): Sẽ gán 1 chức năng lên 1 mặt, khi lật đến mặt đó sẽ thực hiện chức năng đó
+- Mutiple(Nhiều hành động): Sẽ gán các chức năng phụ của một thiết bị lên 1 mặt, việc này tránh xung đột với hành động lật mặt
+Kết luận: Chia ra 2 nhánh sẽ dễ xử lý hơn khi gộp lại thành 1
+
+- Yêu cầu đầu ra của hộp sẽ là:
++ Mặt nào đang hiển thị ( Top, Bottom,... ) 
++ Tương tác nào đang được thực hiện trên 1 mặt ( Shake , Clockwise, Reverse Clockwise ) 
+
+1.2.2 Điều khiển các thiết bị khác
+- Câu hỏi đặt ra: Làm sao để 2 hai thiết bị giao tiếp với nhau ? 
+Ví dụ: Để 2 người lạ nhắn tin cho nhau phải thông qua trung gian. Có thể tạm gọi là internet nhưng nếu nói chính xác thì các tin nhắn của 2 người dùng được lưu trên cơ sở dữ liệu và ứng dụng điện thoại sẽ truy cập đến CSDL và yêu cầu tin nhắn của người kia vừa gửi 
+
+Trả lời: 
+Đặt "Hộp" là người gửi 
+-> Hộp gửi lệnh "Turn on LED" thì dĩ nhiên thiết bị "Led" sẽ lên CSDL để yêu cầu câu lệnh đó và thực hiện theo yêu cầu 
+-> Việc này thì hoàn toàn có thể nhưng sẽ đặt gánh nặng lên bộ xử lý của ESP, khi phải đồng thời xử lý detect cử chỉ, liên tục cập nhật thiết lập mới của người dùng (VD: mặt trên thì tắt đèn -> thay đổi -> Mặt trên tắt đèn) 
+
+Do đó Hộp chỉ nên dừng lại ở việc gửi thông tin về "Mặt" và "Tương tác" nào cho CSDL , còn lại việc điều khiển sẽ do CSDL xử lý -> Tính năng này sẽ được gọi là serverless
+
+1.2.3 Quyền sở hữu 
+- Do ứng dụng điện thoại hướng đến quản lý nhiều tài khoản, dĩ nhiên người dùng cũng sẽ sở hữu riêng sản phẩm của mình. Tuy nó sẽ tạo thêm tính phức tạp nhưng sẽ trở thành 1 sản phẩm đúng nghĩa .
+- Đơn giản thì khi người dùng thiết lập wifi cho ESP, ngoài thông tin WIfi , còn gửi thêm userid -> ESP sẽ kết nối đến CSDL và định danh chính nó là thuộc người dùng nào 
+| productid | userid | . Xét ở mặt CSDL, thì userid được xem là khóa ngoại
+
+1.3 Quá trình thực hiện 
+- Quyết định các tính năng chính và tính năng phụ: 
+	+ Tính năng chính: Thu thập dữ liệu từ IMU
+	+ Tính năng phụ: Sản phẩm có thể được sạc, có nút để bật/tắt nguồn
+- Thiết kế Hộp 3D bằng Tinkercard ( Tìm hiểu )
+- Hàn linh kiện MPU9250, ESP32-C3, TP4056 
+- Thiết lập cho IMU ( trọng trường , giới hạn góc quay ) và xử lý nhiễu ( Kiến thức có sẵn nhưng khá dài ) 
+- Thiết kế thuật toán: 
+	+ Phát hiện mặt nào ( Tự suy luận ) 
+	+ Phát hiện cử chỉ trên 1 mặt ( Có phương pháp ) 
+- Học về cách truyền gửi thông tin lên Supabase ( Trước đó phải có CSDL ) 
+- Học về cách quảng bá BLE và xác nhận việc truyền gửi
+
+--2. Đèn Led, Quạt--
+
+2.1 Xác định yêu cầu
+- Chỉ là sản phẩm tượng trưng cho các sản phẩm thông minh ở thị trường như đèn cảm biến chuyển động, quạt điều hòa, ... 
+- Không in PCB 
+- Ít điện năng tiêu thụ nên xài pin tháo lắp 
+
+2.2 Ý tưởng 
+- Như ở phần 1.2.2 có nhắc đến , các thiết bị con ( led , quạt ) sẽ chỉ đọc thông tin từ CSDL và thay đổi bản thân nó. Đơn giản vậy thôi, các tính năng cũng sẽ ná ná như "hộp" 
+2.3 Quá trình thực hiện 
+- Hàn linh kiên WS2812
+- Việc tăng giảm độ sáng ( PWM ) được thư viện hỗ trợ ( khá nhanh ) 
+- Đọc thư viện Supabase-ESP để nghiên cứu về websocket -> giảm quá trình yêu cầu nhận gói tin từ CSDL ( đang nghiên cứu ) 
+- Học thêm về kiến thưc "interrupt và polling". 
+Polling đơn giản là kiểm tra trạng thái sau 1 khoảng thời gian x nào đó. không được hiểu quả 
+
+/* chạy từ trên xuống dưới */ 
+while(1) {                 // vòng lặp 
+	if(trạng thái){   
+	// thực hiên gì đó 
+	}
+}
+
+Thay vào đó nên dùng ngắt 
+
+trạng thái = ISR(enable) 
+
+khi trạng thái thay đổi sẽ gọi hàm ISR, mang tính  real-time hơn

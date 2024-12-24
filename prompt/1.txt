@@ -1,0 +1,48 @@
+Start: The function is triggered after an update on current_side or state in the cubes table.
+
+Log Trigger Activation: Insert a log entry indicating the trigger has been activated.
+
+Check for Matching Side Name:
+
+Decision: Does cubeSides contain a row with cube_id = NEW.id and side_name = NEW.current_side?
+Yes: Continue to Step 4.
+No: Exit the function (End).
+Log Matching Side Found: Log a message indicating a matching side_name was found.
+ 
+Retrieve action_type:
+
+Set action_type based on the value in the cubeSides table for the matched cube_id and side_name.
+Check action_type:
+
+Decision: Is action_type = 'one' or action_type = 'multiple'?
+If action_type = 'one':
+
+Retrieve toggle_data from cubeSides.
+Update devices table using toggle_data (set status for the specified device_id).
+Log that the one action type was processed.
+Move to Step 11 (Final Update).
+If action_type = 'multiple':
+
+Check state in cubes (Step 7).
+Continue based on the state match in Step 8.
+Check state:
+
+Decision: Does NEW.state match shake, clockwise, or r_clockwise?
+Yes: Retrieve the corresponding JSON data (toggle_data) from cubeSides based on the matching state.
+Log which state matched and the retrieved toggle_data.
+No: Log "No matching state found" and exit (End).
+Process toggle_data for multiple Action Type:
+
+Decision: Does toggle_data contain either 'dim' or 'speed'?
+If toggle_data contains 'dim':
+Update leds.dim based on whether toggle_data->>'dim' is 'increase' or 'decrease'.
+Log the update to the leds table.
+If toggle_data contains 'speed':
+Update fans.speed based on whether toggle_data->>'speed' is 'increase' or 'decrease'.
+Log the update to the fans table.
+Final Update:
+
+Update cubes table to set current_side to 'unknown' and state to 'idle'.
+Log this final update.
+End: The function ends.
+

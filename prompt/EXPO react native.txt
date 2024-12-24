@@ -1,0 +1,58 @@
+Top: 
+111
+000
+000
+
+Front:
+000
+111
+000
+
+Left: 
+100
+010
+001
+
+Right:
+001
+010
+100
+
+Back:
+Mat nay ko can kheth 
+
+Front:
+111
+010 
+111
+
+top: 
+⬤ ⬤  
+⬜ ⬜  
+⬜ ⬜  
+
+front face:
+⬤ ⬜  
+⬤ ⬜  
+⬤ ⬜  
+
+left face:
+⬤ ⬜  
+⬜ ⬤  
+⬜ ⬜  
+
+right:
+⬜ ⬜  
+⬜ ⬤  
+⬤ ⬜  
+
+BOTTOM:
+⬤ ⬤  
+⬤ ⬤  
+⬤ ⬤  
+
+BACK:
+⬜ ⬜  
+⬜ ⬤  
+⬜ ⬜  
+

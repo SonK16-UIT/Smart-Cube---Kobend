@@ -1,0 +1,58 @@
+Range min to max on each faces:
+
+Top: Pitch: -8.39 -> 1.45, Roll: -1.42 -> 4.59
+Bottom: Pitch: -4.81 -> -1.36 , Roll: -56.88 -> 63.85
+
+Left: Pitch: 65 -> 82 , Roll: 11 -> 136
+Right: Pitch: -82 -> -68 , Roll: -84 -> 90
+
+Front: Pitch: -18 -> 3 , Roll: 92 -> 98
+Back: Pitch: -6.4 -> 5 , Roll: -95 -> -90
+
+
+const float flipThreshold = 30.0;
+String detectFaceOrientation(float currentPitch, float currentRoll, float pitchDiff, float rollDiff) {
+    if (fabs(pitchDiff) < flipThreshold && fabs(rollDiff) < flipThreshold) {
+        return "Top";  // Cube is likely in the base orientation
+    } 
+    else if (fabs(rollDiff) > 150 && fabs(currentPitch) < flipThreshold) {
+        return "Bottom";  // Cube flipped with bottom facing down
+    } 
+    else if (fabs(pitchDiff - 90) < flipThreshold) {
+        return "Right";  // Right face is down
+    } 
+    else if (fabs(pitchDiff + 90) < flipThreshold) {
+        return "Left";  // Left face is down
+    } 
+    else if (fabs(rollDiff - 90) < flipThreshold) {
+        return "Front";  // Front face is down
+    } 
+    else if (fabs(rollDiff + 90) < flipThreshold) {
+        return "Back";  // Back face is down
+    } 
+    else {
+        return "Unknown";  // Orientation does not match any known face
+    }
+}
+
+Kiểm tra mặt "Top":
+
+Nếu sự thay đổi về pitch và roll nhỏ hơn ngưỡng flipThreshold (30 độ), chương trình sẽ nhận diện đối tượng đang ở trạng thái bình thường, mặt "Top" của hộp hướng lên.
+Kiểm tra mặt "Bottom":
+
+Nếu sự thay đổi về roll lớn hơn 150 độ và góc pitch gần bằng 0, chương trình xác định đối tượng đã bị lật, với mặt dưới ("Bottom") đang hướng xuống.
+Kiểm tra mặt "Right":
+
+Nếu sự thay đổi về pitch gần bằng 90 độ (±30 độ), điều này chỉ ra rằng mặt "Right" của hộp đang hướng xuống.
+Kiểm tra mặt "Left":
+
+Nếu sự thay đổi về pitch gần bằng -90 độ (±30 độ), chương trình sẽ nhận diện mặt "Left" của hộp đang ở dưới.
+Kiểm tra mặt "Front":
+
+Nếu sự thay đổi về roll gần bằng 90 độ (±30 độ), mặt "Front" của hộp đang ở dưới.
+Kiểm tra mặt "Back":
+
+Nếu sự thay đổi về roll gần bằng -90 độ (±30 độ), mặt "Back" của hộp đang ở dưới.
+Trường hợp không xác định:
+
+Nếu không có điều kiện nào thỏa mãn, chương trình trả về "Unknown", tức là không xác định được mặt nào đang hướng xuống.

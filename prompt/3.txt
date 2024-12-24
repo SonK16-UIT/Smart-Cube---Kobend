@@ -1,0 +1,42 @@
+function handle_current_side_update:
+
+1) If current_side update 
+-> check for side_name on cubeSides table
+
+2) if(current_side == side_name) 
+-> check action_type on cubeSides Table
+if not equal -> do nothing
+
+3) if (action_type == "one") 
+-> check toggle on cubeSides table
+
+4) Get toggle information in form of a object which include { device_id: ... , status: ... } 
+
+5) Next we move to devices table and start comparing 
+5.1) if device_id = [0].toggle ( device_id)  -> go 4.2
+5.2) if [1].toggle (status) -> change the status on table Devices to [1].toggle.value 
+
+
+function handle_current_side_state_update:
+1) if current_side and state update on cubes table
+-> check for side_name on cubeSides table
+
+2) if(current_side == side_name) 
+-> check action_type on cubeSides Table
+if not equal -> do nothing
+
+3) if (action_type == "mutiple") 
+-> check shake,clockwise,r_clockwise on cubeSides table
+
+4) if ( state(from cubes table) equal to either shake, clockwise , r_clockwise fields) 
+-> get the json information field match with state(from the cube) : { device_id: ... , ... : ... }
+
+5)Next we move to devices table 
+5.1) -> if ( json.field[1] == 'dim' ) -> go to leds table 
+-> if ( json.data[1] == 'increase') -> increase dim by 10
+if ( 'decrease' ) -> decrease dim by 10
+
+5.2)-> if ( json.data[1] == 'speed' ) -> go to fans table
+-> if ( json.data[1] == 'increase') -> increase speed by 10
+if ( 'decrease' ) -> decrease speed by 10
+
